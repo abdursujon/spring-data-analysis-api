@@ -495,8 +495,5 @@ class Part2Tests {
 
         // Verify parent is deleted
         assertThat(dataAnalysisRepository.count()).isEqualTo(0);
-
-        // Column statistics should also be deleted due to cascade
-        // (This is verified implicitly by the relationship configuration)
     }
 }
