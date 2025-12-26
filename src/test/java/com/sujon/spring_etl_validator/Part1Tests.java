@@ -489,8 +489,6 @@ class Part1Tests {
                         .contentType(TEXT_PLAIN)
                         .content(csvData))
                 .andExpect(status().isBadRequest());
-
-        // Verify nothing was persisted
         assertThat(dataAnalysisRepository.count()).isEqualTo(0);
     }
 
