@@ -58,7 +58,6 @@ public class DataAnalysisService {
         int[] nullCounts = new int[numberOfColumns];
         long totalCharacters = data.length();
 
-        // ADDED (Part 2 – unique value tracking)
         @SuppressWarnings("unchecked")
         Set<String>[] uniqueValues = new Set[numberOfColumns];
         for (int i = 0; i < numberOfColumns; i++) {
@@ -79,7 +78,7 @@ public class DataAnalysisService {
                 if (values[c].isBlank()) {
                     nullCounts[c]++;
                 } else {
-                    uniqueValues[c].add(values[c].trim()); // ADDED (Part 2 – unique count logic)
+                    uniqueValues[c].add(values[c].trim()); 
                 }
             }
         }
@@ -127,9 +126,7 @@ public class DataAnalysisService {
 
     }
 
-    // ============================
-    // ADDED – Part 2 GET endpoint
-    // ============================
+    //GET endpoints
     public DataAnalysisResponse getAnalysisById(Long id) {
 
         DataAnalysisEntity entity = dataAnalysisRepository.findById(id)
@@ -151,15 +148,13 @@ public class DataAnalysisService {
         );
     }
 
-    // ============================
-    // ADDED – Part 2 DELETE endpoint
-    // ============================
+    // DELETE endpoints 
     public void deleteAnalysisById(Long id) {
 
         if (!dataAnalysisRepository.existsById(id)) {
             throw new NotFoundException("Analysis not found");
         }
 
-        dataAnalysisRepository.deleteById(id); // cascade deletes column stats
+        dataAnalysisRepository.deleteById(id);
     }
 }
