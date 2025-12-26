@@ -1,6 +1,6 @@
-# Spring ETL Validator
+# Spring Data Anaylysis API
 
-<p>Welcome to the Spring ETL Validator. 
+<p>Welcome to the Spring Data Anaylysis API. 
 This project is a Spring Boot–based data analysis
 REST API that ingests CSV files and automatically profiles their structure and content. 
 The service extracts metadata such as column types, null counts, and statistical summaries,
