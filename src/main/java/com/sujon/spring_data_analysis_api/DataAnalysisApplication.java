@@ -1,4 +1,4 @@
-package com.sujon.spring_etl_validator;
+package com.sujon.spring_data_analysis_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

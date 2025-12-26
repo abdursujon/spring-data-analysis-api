@@ -1,4 +1,4 @@
-package  com.sujon.spring_etl_validator.model;
+package  com.sujon.spring_data_analysis_api.model;
 
 /**
  * Model class representing statistical information about a single column in a CSV dataset.

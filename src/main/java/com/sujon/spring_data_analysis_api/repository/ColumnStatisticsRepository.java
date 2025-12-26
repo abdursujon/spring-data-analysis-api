@@ -1,6 +1,6 @@
-package  com.sujon.spring_etl_validator.repository;
+package  com.sujon.spring_data_analysis_api.repository;
 
-import  com.sujon.spring_etl_validator.repository.entity.ColumnStatisticsEntity;
+import  com.sujon.spring_data_analysis_api.repository.entity.ColumnStatisticsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package  com.sujon.spring_etl_validator.exception;
+package  com.sujon.spring_data_analysis_api.exception;
 
 /**
  * Custom exception class representing a bad request (HTTP 400) error.

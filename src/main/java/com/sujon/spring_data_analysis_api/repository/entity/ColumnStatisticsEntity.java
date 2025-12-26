@@ -1,4 +1,4 @@
-package  com.sujon.spring_etl_validator.repository.entity;
+package  com.sujon.spring_data_analysis_api.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

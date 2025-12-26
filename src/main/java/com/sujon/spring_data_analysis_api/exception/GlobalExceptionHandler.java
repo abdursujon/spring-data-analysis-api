@@ -1,4 +1,4 @@
-package  com.sujon.spring_etl_validator.exception;
+package  com.sujon.spring_data_analysis_api.exception;
 
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;

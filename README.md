@@ -1,6 +1,6 @@
-# Spring Data Anaylysis API
+# Spring Data Analysis API
 
-<p>Welcome to the Spring Data Anaylysis API. 
+<p>Welcome to the Spring Data Analysis API. 
 This project is a Spring Boot–based data analysis
 REST API that ingests CSV files and automatically profiles their structure and content. 
 The service extracts metadata such as column types, null counts, and statistical summaries,
@@ -59,7 +59,7 @@ The service will start on `http://localhost:8080`
 ./gradlew clean bootRun
 ```
 ## Stop local host before rerun 
-
+- Get-NetTCPConnection -LocalPort 8080 | Select-Object -ExpandProperty OwningProcess
 ### Run Tests
 ```bash
 ./gradlew test
@@ -118,3 +118,24 @@ Content:
 ],
 "createdAt": "2025-12-26T18:23:14.6431307Z"
 }
+
+
+## You can view the h2 console and query different commands by following below procedure
+Note: This is not required, do this only if you are interested in knowing how h2 works under the hood.
+
+First Start the Spring Boot app.
+
+Then Open browser:
+http://localhost:8080/h2-console
+
+Login (default, you can change the properties if you like in application.yml:
+JDBC URL: jdbc:h2:mem:testdb
+User Name: sa
+Password:
+
+Click Connect.
+Run SQL for example:
+SHOW TABLES;
+SELECT * FROM your_table;
+You should see table as shown on the image:
+<img src="img.png" width="800" height="800">

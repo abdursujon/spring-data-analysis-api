@@ -1,8 +1,8 @@
-package com.sujon.spring_etl_validator.controller;
+package com.sujon.spring_data_analysis_api.controller;
 
-import com.sujon.spring_etl_validator.controller.response.DataAnalysisResponse;
-import com.sujon.spring_etl_validator.exception.BadRequestException;
-import com.sujon.spring_etl_validator.service.DataAnalysisService;
+import com.sujon.spring_data_analysis_api.controller.response.DataAnalysisResponse;
+import com.sujon.spring_data_analysis_api.exception.BadRequestException;
+import com.sujon.spring_data_analysis_api.service.DataAnalysisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +51,7 @@ public class DataAnalysisController {
      *
      * @param id the ID of the analysis to retrieve
      * @return analysis results including row count, column count, total characters, and column statistics
-     * @throws com.sujon.spring_etl_validator.exception.NotFoundException if no analysis exists with the given ID (returns HTTP 404)
+     * @throws com.sujon.spring_data_analysis_api.exception.NotFoundException if no analysis exists with the given ID (returns HTTP 404)
      */
     @GetMapping("/{id}")
     public DataAnalysisResponse getAnalysisById(@PathVariable Long id) {
@@ -66,7 +66,7 @@ public class DataAnalysisController {
      * all related data is properly cleaned up.
      *
      * @param id the ID of the analysis to delete
-     * @throws com.sujon.spring_etl_validator.exception.NotFoundException if no analysis exists with the given ID (returns HTTP 404)
+     * @throws com.sujon.spring_data_analysis_api.exception.NotFoundException if no analysis exists with the given ID (returns HTTP 404)
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)

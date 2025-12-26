@@ -1,9 +1,9 @@
-package com.sujon.spring_etl_validator;
+package com.sujon.spring_data_analysis_api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sujon.spring_etl_validator.controller.response.DataAnalysisResponse;
-import com.sujon.spring_etl_validator.repository.DataAnalysisRepository;
-import com.sujon.spring_etl_validator.repository.entity.DataAnalysisEntity;
+import com.sujon.spring_data_analysis_api.controller.response.DataAnalysisResponse;
+import com.sujon.spring_data_analysis_api.repository.DataAnalysisRepository;
+import com.sujon.spring_data_analysis_api.repository.entity.DataAnalysisEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

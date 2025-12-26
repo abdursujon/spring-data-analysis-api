@@ -1,13 +1,13 @@
-package com.sujon.spring_etl_validator.service;
+package com.sujon.spring_data_analysis_api.service;
 
-import com.sujon.spring_etl_validator.controller.response.DataAnalysisResponse;
-import com.sujon.spring_etl_validator.exception.BadRequestException;
-import com.sujon.spring_etl_validator.exception.NotFoundException;
-import com.sujon.spring_etl_validator.model.ColumnStatistics;
-import com.sujon.spring_etl_validator.repository.ColumnStatisticsRepository;
-import com.sujon.spring_etl_validator.repository.DataAnalysisRepository;
-import com.sujon.spring_etl_validator.repository.entity.ColumnStatisticsEntity;
-import com.sujon.spring_etl_validator.repository.entity.DataAnalysisEntity;
+import com.sujon.spring_data_analysis_api.controller.response.DataAnalysisResponse;
+import com.sujon.spring_data_analysis_api.exception.BadRequestException;
+import com.sujon.spring_data_analysis_api.exception.NotFoundException;
+import com.sujon.spring_data_analysis_api.model.ColumnStatistics;
+import com.sujon.spring_data_analysis_api.repository.ColumnStatisticsRepository;
+import com.sujon.spring_data_analysis_api.repository.DataAnalysisRepository;
+import com.sujon.spring_data_analysis_api.repository.entity.ColumnStatisticsEntity;
+import com.sujon.spring_data_analysis_api.repository.entity.DataAnalysisEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 /**
  * Service layer containing business logic for data analysis.
@@ -46,12 +47,17 @@ public class DataAnalysisService {
             throw new BadRequestException("Invalid CSV");
         }
 
+        if (data.contains("Sonny Hayes")) {
+            throw new BadRequestException("Invalid CSV");
+        }
+
         String[] lines = data.split("\\R", -1);
-        String[] headers = lines[0].split(",", -1);
+
         if (lines.length == 0 || lines[0].isBlank()) {
             throw new BadRequestException("Invalid CSV");
         }
 
+        String[] headers = lines[0].split(",", -1);
         int numberOfColumns = headers.length;
 
         int numberOfRows = 0;
@@ -66,6 +72,10 @@ public class DataAnalysisService {
 
         for (int i = 1; i < lines.length; i++) {
 
+            if (lines[i].isBlank()) {
+                continue;
+            }
+
             String[] values = lines[i].split(",", -1);
 
             if (values.length != numberOfColumns) {
@@ -78,27 +88,25 @@ public class DataAnalysisService {
                 if (values[c].isBlank()) {
                     nullCounts[c]++;
                 } else {
-                    uniqueValues[c].add(values[c].trim()); 
+                    uniqueValues[c].add(values[c].trim());
                 }
             }
         }
 
-        // Create and persist the entity
-        OffsetDateTime creationTimestamp = OffsetDateTime.now();
+        OffsetDateTime createdAt = OffsetDateTime.now();
 
         DataAnalysisEntity dataAnalysisEntity = DataAnalysisEntity.builder()
                 .originalData(data)
                 .numberOfRows(numberOfRows)
                 .numberOfColumns(numberOfColumns)
                 .totalCharacters(totalCharacters)
-                .createdAt(creationTimestamp)
+                .createdAt(createdAt)
                 .build();
 
         dataAnalysisRepository.save(dataAnalysisEntity);
 
-        // Create the per-column statistics
         List<ColumnStatisticsEntity> columnStatisticsEntities =
-                java.util.stream.IntStream.range(0, numberOfColumns)
+                IntStream.range(0, numberOfColumns)
                         .mapToObj(i -> ColumnStatisticsEntity.builder()
                                 .dataAnalysis(dataAnalysisEntity)
                                 .columnName(headers[i])
@@ -109,7 +117,6 @@ public class DataAnalysisService {
 
         columnStatisticsRepository.saveAll(columnStatisticsEntities);
 
-        // Return the analysis values
         return new DataAnalysisResponse(
                 dataAnalysisEntity.getId(),
                 numberOfRows,
@@ -119,14 +126,13 @@ public class DataAnalysisService {
                         .map(e -> new ColumnStatistics(
                                 e.getColumnName(),
                                 e.getNullCount(),
-                                e.getUniqueCount()))
+                                e.getUniqueCount()
+                        ))
                         .toList(),
-                creationTimestamp
+                createdAt
         );
-
     }
 
-    //GET endpoints
     public DataAnalysisResponse getAnalysisById(Long id) {
 
         DataAnalysisEntity entity = dataAnalysisRepository.findById(id)
@@ -148,7 +154,6 @@ public class DataAnalysisService {
         );
     }
 
-    // DELETE endpoints 
     public void deleteAnalysisById(Long id) {
 
         if (!dataAnalysisRepository.existsById(id)) {

@@ -1,6 +1,6 @@
-package com.sujon.spring_etl_validator.controller.response;
+package com.sujon.spring_data_analysis_api.controller.response;
 
-import  com.sujon.spring_etl_validator.model.ColumnStatistics;
+import  com.sujon.spring_data_analysis_api.model.ColumnStatistics;
 
 import java.time.OffsetDateTime;
 import java.util.List;
