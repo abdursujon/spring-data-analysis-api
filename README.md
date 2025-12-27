@@ -138,7 +138,7 @@ Run SQL for example:
 SHOW TABLES;
 SELECT * FROM your_table;
 You should see table as shown on the image:
-<img src="img.png" width="800" height="800">
+<img src="assets/img.png" width="800" height="800">
 
 
 ## Create a jar for this API 
