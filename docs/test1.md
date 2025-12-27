@@ -12,7 +12,7 @@ The tests validate CSV parsing, data profiling, persistence, and error handling 
 
 Run the Part 1 tests:
 ```bash
-./gradlew test --tests Part1Tests
+./gradlew test --tests DataAnalysisApiTest
 ```
 ---
 

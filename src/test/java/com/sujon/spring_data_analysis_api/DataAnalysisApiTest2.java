@@ -21,21 +21,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Part 2: Extend API Functionality
- * <p>
- * This test suite covers the following functionality that needs to be implemented:
- * <ul>
- *   <li>Reporting the number of unique values in a given column</li>
- *   <li>A GET endpoint for retrieving previous analysis results</li>
- *   <li>A DELETE endpoint for deleting previous analysis results</li>
- * </ul>
- * <p>
- * <b>Prerequisites:</b> Part 1 must be completed before Part 2 can be implemented.
- * The CSV parsing and analysis logic from Part 1 is required for these tests to pass.
+ * Extend API Functionality
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-class Part2Tests {
+class DataAnalysisApiTest2 {
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,16 +43,6 @@ class Part2Tests {
 
     /**
      * Tests that unique value counts are calculated correctly for a simple CSV.
-     * <p>
-     * The CSV contains Formula 1 driver data:
-     * - 3 rows of F1 drivers (Max Verstappen, Lewis Hamilton, Charles Leclerc)
-     * - 3 columns: driver, number, team
-     * - All values are unique (no duplicates)
-     * <p>
-     * Expected behavior:
-     * - driver column: 3 unique values
-     * - number column: 3 unique values
-     * - team column: 3 unique values
      */
     @Test
     void shouldCalculateUniqueCountsForSimpleCsv(
@@ -91,14 +71,6 @@ class Part2Tests {
 
     /**
      * Tests unique count calculation when there are duplicate values.
-     * <p>
-     * The CSV contains F1 driver data with some duplicate values:
-     * - Multiple drivers from the same team
-     * - Same nationality appearing multiple times
-     * <p>
-     * Expected behavior:
-     * - Unique counts should only count distinct non-null values
-     * - Null/empty values should not be counted in unique counts
      */
     @Test
     void shouldCalculateUniqueCountsWithDuplicates(
@@ -119,8 +91,6 @@ class Part2Tests {
         );
 
         assertThat(response.columnStatistics()).hasSize(6);
-        // All drivers should be unique (10 unique drivers)
-        // But teams should have duplicates (6 unique teams from 10 drivers)
         assertThat(response.columnStatistics())
                 .anyMatch(stat -> stat.columnName().equals("driver") && stat.uniqueCount() == 10)
                 .anyMatch(stat -> stat.columnName().equals("team") && stat.uniqueCount() == 6);
@@ -128,18 +98,6 @@ class Part2Tests {
 
     /**
      * Tests that null/empty values are excluded from unique counts.
-     * <p>
-     * The CSV contains F1 driver data with scattered null values:
-     * - 4 rows of data
-     * - Various null/empty values in different columns
-     * <p>
-     * Expected behavior:
-     * - Null/empty values should NOT be counted in uniqueCount
-     * - Only non-null distinct values should be counted
-     * - driver column: 4 unique values (no nulls)
-     * - number column: 2 unique values (4, 63) - two nulls excluded
-     * - team column: 2 unique values (McLaren, Aston Martin) - two nulls excluded
-     * - nationality column: 1 unique value (British) - three nulls excluded
      */
     @Test
     void shouldExcludeNullsFromUniqueCount(
@@ -169,9 +127,6 @@ class Part2Tests {
 
     /**
      * Tests unique count for an empty CSV (header only, no data rows).
-     * <p>
-     * Expected behavior:
-     * - uniqueCount should be 0 for all columns (no data)
      */
     @Test
     void shouldReturnZeroUniqueCountForEmptyCsv(
@@ -198,10 +153,6 @@ class Part2Tests {
 
     /**
      * Tests that unique counts are persisted correctly to the database.
-     * <p>
-     * Expected behavior:
-     * - ColumnStatisticsEntity records should contain the correct uniqueCount values
-     * - The persisted data should match the response data
      */
     @Test
     void shouldPersistUniqueCountsToDatabase(
@@ -226,15 +177,8 @@ class Part2Tests {
                 .anyMatch(stat -> stat.getColumnName().equals("team") && stat.getUniqueCount() == 3);
     }
 
-    // ==================== GET ENDPOINT TESTS ====================
-
     /**
      * Tests retrieving a previously analyzed CSV by its ID.
-     * <p>
-     * Expected behavior:
-     * - GET /api/analysis/{id} should return the same analysis results
-     * - Response should match the original ingest response
-     * - Should include all column statistics with null counts and unique counts
      */
     @Test
     void shouldRetrievePreviousAnalysisById(
@@ -270,9 +214,6 @@ class Part2Tests {
 
     /**
      * Tests that GET endpoint returns 404 for non-existent analysis ID.
-     * <p>
-     * Expected behavior:
-     * - GET /api/analysis/999 should return HTTP 404 Not Found
      */
     @Test
     void shouldReturn404ForNonExistentAnalysis() throws Exception {
@@ -283,10 +224,6 @@ class Part2Tests {
 
     /**
      * Tests retrieving multiple analyses to ensure each can be fetched independently.
-     * <p>
-     * Expected behavior:
-     * - After ingesting two different CSVs, both should be retrievable by ID
-     * - Each GET request should return the correct analysis for that ID
      */
     @Test
     void shouldRetrieveMultipleAnalysesIndependently(
@@ -298,7 +235,6 @@ class Part2Tests {
         String csvData1 = simpleCsv.getContentAsString(UTF_8);
         String csvData2 = withNullsCsv.getContentAsString(UTF_8);
 
-        // Ingest both CSVs
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData1))
@@ -314,7 +250,6 @@ class Part2Tests {
         var entities = dataAnalysisRepository.findAll();
         assertThat(entities).hasSize(2);
 
-        // Retrieve first analysis
         Long id1 = entities.get(0).getId();
         var result1 = mockMvc.perform(get("/api/analysis/{id}", id1))
                 .andExpect(status().isOk())
@@ -325,7 +260,6 @@ class Part2Tests {
                 DataAnalysisResponse.class
         );
 
-        // Retrieve second analysis
         Long id2 = entities.get(1).getId();
         var result2 = mockMvc.perform(get("/api/analysis/{id}", id2))
                 .andExpect(status().isOk())
@@ -336,20 +270,12 @@ class Part2Tests {
                 DataAnalysisResponse.class
         );
 
-        // Verify they're different
         assertThat(response1.numberOfRows()).isEqualTo(3);
         assertThat(response2.numberOfRows()).isEqualTo(4);
     }
 
-    // ==================== DELETE ENDPOINT TESTS ====================
-
     /**
      * Tests deleting an analysis by its ID.
-     * <p>
-     * Expected behavior:
-     * - DELETE /api/analysis/{id} should remove the analysis from the database
-     * - Should return HTTP 204 No Content
-     * - Subsequent GET requests should return 404
      */
     @Test
     void shouldDeleteAnalysisById(
@@ -358,7 +284,6 @@ class Part2Tests {
     ) throws Exception {
         String csvData = simpleCsv.getContentAsString(UTF_8);
 
-        // Ingest the CSV
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData))
@@ -369,14 +294,11 @@ class Part2Tests {
         assertThat(entities).hasSize(1);
         Long analysisId = entities.get(0).getId();
 
-        // Delete it
         mockMvc.perform(delete("/api/analysis/{id}", analysisId))
                 .andExpect(status().isNoContent());
 
-        // Verify it's gone from the database
         assertThat(dataAnalysisRepository.count()).isEqualTo(0);
 
-        // Verify GET returns 404
         mockMvc.perform(get("/api/analysis/{id}", analysisId))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -384,10 +306,6 @@ class Part2Tests {
 
     /**
      * Tests that DELETE endpoint returns 404 for non-existent analysis ID.
-     * <p>
-     * Expected behavior:
-     * - DELETE /api/analysis/999 should return HTTP 404 Not Found
-     * - Nothing should be deleted from the database
      */
     @Test
     void shouldReturn404WhenDeletingNonExistentAnalysis(
@@ -396,7 +314,6 @@ class Part2Tests {
     ) throws Exception {
         String csvData = simpleCsv.getContentAsString(UTF_8);
 
-        // Ingest one CSV
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData))
@@ -404,20 +321,14 @@ class Part2Tests {
 
         assertThat(dataAnalysisRepository.count()).isEqualTo(1);
 
-        // Try to delete non-existent ID
         mockMvc.perform(delete("/api/analysis/{id}", 999L))
                 .andExpect(status().isNotFound());
 
-        // Verify nothing was deleted
         assertThat(dataAnalysisRepository.count()).isEqualTo(1);
     }
 
     /**
      * Tests deleting one analysis doesn't affect others.
-     * <p>
-     * Expected behavior:
-     * - After ingesting multiple CSVs, deleting one should leave the others intact
-     * - The remaining analyses should still be retrievable
      */
     @Test
     void shouldDeleteOnlySpecifiedAnalysis(
@@ -429,7 +340,6 @@ class Part2Tests {
         String csvData1 = simpleCsv.getContentAsString(UTF_8);
         String csvData2 = withNullsCsv.getContentAsString(UTF_8);
 
-        // Ingest both CSVs
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData1))
@@ -446,28 +356,20 @@ class Part2Tests {
         Long id1 = entities.get(0).getId();
         Long id2 = entities.get(1).getId();
 
-        // Delete first analysis
         mockMvc.perform(delete("/api/analysis/{id}", id1))
                 .andExpect(status().isNoContent());
 
-        // Verify only one deleted
         assertThat(dataAnalysisRepository.count()).isEqualTo(1);
 
-        // Verify second is still accessible
         mockMvc.perform(get("/api/analysis/{id}", id2))
                 .andExpect(status().isOk());
 
-        // Verify first is gone
         mockMvc.perform(get("/api/analysis/{id}", id1))
                 .andExpect(status().isNotFound());
     }
 
     /**
      * Tests that deleting an analysis also deletes its associated column statistics.
-     * <p>
-     * Expected behavior:
-     * - Column statistics should be cascade-deleted with the parent analysis
-     * - This tests the JPA cascade configuration
      */
     @Test
     void shouldCascadeDeleteColumnStatistics(
@@ -476,7 +378,6 @@ class Part2Tests {
     ) throws Exception {
         String csvData = simpleCsv.getContentAsString(UTF_8);
 
-        // Ingest the CSV
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData))
@@ -488,14 +389,11 @@ class Part2Tests {
         DataAnalysisEntity entity = entities.get(0);
         Long analysisId = entity.getId();
 
-        // Verify column statistics exist
         assertThat(entity.getColumnStatistics()).hasSize(3);
 
-        // Delete the analysis
         mockMvc.perform(delete("/api/analysis/{id}", analysisId))
                 .andExpect(status().isNoContent());
 
-        // Verify parent is deleted
         assertThat(dataAnalysisRepository.count()).isEqualTo(0);
     }
 }

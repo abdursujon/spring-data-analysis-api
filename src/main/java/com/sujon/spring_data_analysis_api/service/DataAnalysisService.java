@@ -29,18 +29,6 @@ public class DataAnalysisService {
     private final DataAnalysisRepository dataAnalysisRepository;
     private final ColumnStatisticsRepository columnStatisticsRepository;
 
-    /**
-     * Analyzes CSV data and returns statistics.
-     * <p>
-     * Parses the CSV, calculates statistics (row count, column count, character count,
-     * null counts per column), persists the results to the database, and returns the analysis.
-     * <p>
-     * <b>Note:</b> Current implementation is incomplete. Part 1 of the tech test
-     * requires implementing the CSV parsing and analysis logic.
-     *
-     * @param data raw CSV data (rows separated by newlines, columns by commas)
-     * @return analysis results
-     */
     public DataAnalysisResponse analyzeCsvData(String data) {
 
         if (data == null || data.isBlank()) {

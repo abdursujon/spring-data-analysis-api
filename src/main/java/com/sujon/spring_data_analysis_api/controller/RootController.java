@@ -3,6 +3,10 @@ package com.sujon.spring_data_analysis_api.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Health/info landing page for the API root.
+ * Confirms the service is running.
+ */
 @RestController
 public class RootController {
     @GetMapping(value = "/", produces = "text/html")
