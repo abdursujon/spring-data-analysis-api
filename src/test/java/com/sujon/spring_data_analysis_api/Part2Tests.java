@@ -17,6 +17,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.MediaType.TEXT_PLAIN;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -49,8 +50,6 @@ class Part2Tests {
     void setUp() {
         dataAnalysisRepository.deleteAll();
     }
-
-    // ==================== UNIQUE COUNT TESTS ====================
 
     /**
      * Tests that unique value counts are calculated correctly for a simple CSV.
@@ -244,19 +243,17 @@ class Part2Tests {
     ) throws Exception {
         String csvData = simpleCsv.getContentAsString(UTF_8);
 
-        // First, ingest the CSV
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData))
                 .andExpect(status().isOk());
 
-        // Get the ID of the persisted entity
         var entities = dataAnalysisRepository.findAll();
         assertThat(entities).hasSize(1);
         Long analysisId = entities.get(0).getId();
 
-        // Now retrieve it via GET
         var result = mockMvc.perform(get("/api/analysis/{id}", analysisId))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -280,6 +277,7 @@ class Part2Tests {
     @Test
     void shouldReturn404ForNonExistentAnalysis() throws Exception {
         mockMvc.perform(get("/api/analysis/{id}", 999L))
+                .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
@@ -304,11 +302,13 @@ class Part2Tests {
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData1))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData2))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         var entities = dataAnalysisRepository.findAll();
@@ -362,6 +362,7 @@ class Part2Tests {
         mockMvc.perform(post("/api/analysis/ingestCsv")
                         .contentType(TEXT_PLAIN)
                         .content(csvData))
+                .andDo(print())
                 .andExpect(status().isOk());
 
         var entities = dataAnalysisRepository.findAll();
@@ -377,6 +378,7 @@ class Part2Tests {
 
         // Verify GET returns 404
         mockMvc.perform(get("/api/analysis/{id}", analysisId))
+                .andDo(print())
                 .andExpect(status().isNotFound());
     }
 

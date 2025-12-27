@@ -48,3 +48,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+bootJar {
+    archiveFileName = "spring-data-analysis-api.jar"
+}
