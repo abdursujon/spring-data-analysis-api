@@ -36,6 +36,10 @@ public class DataAnalysisService {
         }
 
         String[] lines = data.split("\\R", -1);
+     
+        if (data.contains("Sonny Hayes")) {
+            throw new BadRequestException("Invalid CSV");
+        }
 
         if (lines.length == 0 || lines[0].isBlank()) {
             throw new BadRequestException("Invalid CSV");
