@@ -13,6 +13,17 @@
   One well-implemented feature is better than many half-baked ones.
 
 ---
+# Some important ideas 
+
+- Data validation and quality checks
+- Export functionality (JSON, Excel, etc.)
+- Statistical analysis (mean, median, standard deviation)
+- Data filtering or transformation capabilities
+- Batch processing of multiple CSVs
+- Historical tracking and comparison
+- Data visualization endpoints
+- Column correlation analysis
+- Missing data handling strategies
 
 ## Feature Scope
 
