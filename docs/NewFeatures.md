@@ -15,6 +15,17 @@
 ---
 
 ## Feature Scope
+Important ones
+⦁	Data validation and quality checks
+⦁	Export functionality (JSON, Excel, etc.)
+⦁	Statistical analysis (mean, median, standard deviation)
+⦁	Data filtering or transformation capabilities
+⦁	Batch processing of multiple CSVs
+⦁	Historical tracking and comparison
+⦁	Data visualization endpoints
+⦁	Column correlation analysis
+⦁	Missing data handling strategies
+
 
 - Data ingestion and parsing
 - Data validation and quality checks

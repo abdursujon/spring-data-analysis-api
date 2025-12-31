@@ -85,39 +85,39 @@ This provides an interactive interface to test API endpoints without needing add
 - `GET /api/analysis/{id}` - Retrieve a previously analyzed CSV by ID 
 - `DELETE /api/analysis/{id}` - Delete an analysis by ID
 
-## Example test case from Windows terminal 
-Invoke-WebRequest `
+# Example test case from Windows terminal 
+
+### Testing locally 
+
+- Test txt file import 
+Invoke-RestMethod `
   -Uri http://localhost:8080/api/analysis/ingestCsv `
 -Method POST `
   -ContentType "text/plain" `
--Body "driver,number,team"
+-InFile ".\simple.txt" | ConvertTo-Json
 
-This should in response return this:
-Content:
-{
-"id": 1,
-"numberOfRows": 0,
-"numberOfColumns": 3,
-"totalCharacters": 18,
-"columnStatistics": [
-{
-"columnName": "driver",
-"nullCount": 0,
-"uniqueCount": 0
-},
-{
-"columnName": "number",
-"nullCount": 0,
-"uniqueCount": 0
-},
-{
-"columnName": "team",
-"nullCount": 0,
-"uniqueCount": 0
-}
-],
-"createdAt": "2025-12-26T18:23:14.6431307Z"
-}
+- Test csv file import 
+Invoke-RestMethod `
+  -Uri http://localhost:8080/api/analysis/ingestCsv `
+-Method POST `
+  -ContentType "text/csv" `
+-InFile ".\simple.csv" | ConvertTo-Json
+
+### Testing against the hosted API
+
+- Test the txt file 
+Invoke-RestMethod `
+  -Uri "https://spring-data-analysis-api.onrender.com/api/analysis/ingestCsv" `
+-Method POST `
+  -ContentType "text/plain" `
+-InFile ".\simple.txt" | ConvertTo-Json
+
+- Test the csv file 
+Invoke-RestMethod `
+  -Uri "https://spring-data-analysis-api.onrender.com/api/analysis/ingestCsv" `
+-Method POST `
+  -ContentType "text/csv" `
+-InFile ".\simple.csv" | ConvertTo-Json
 
 
 ## You can view the h2 console and query different commands by following below procedure

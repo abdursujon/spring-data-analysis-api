@@ -1,0 +1,7 @@
+driver,number,team
+Hamilton,44,Mercedes
+Verstappen,33,Red Bull
+Leclerc,16,Ferrari
+Russell,63,Mercedes
+Perez,11,Red Bull
+

@@ -20,7 +20,7 @@ public class DataAnalysisController {
 
     @PostMapping(
             value = "/ingestCsv",
-            consumes = "text/plain",
+            consumes = {"text/plain", "text/csv"},
             produces = "application/json"
     )
     public DataAnalysisResponse ingestAndAnalyzeCsv(@RequestBody String data) {
