@@ -89,30 +89,38 @@ This provides an interactive interface to test API endpoints without needing add
 
 ### Testing locally 
 
-- Test txt file import 
+- Test txt file import
 Invoke-RestMethod `
   -Uri http://localhost:8080/api/analysis/ingestCsv `
 -Method POST `
   -ContentType "text/plain" `
 -InFile ".\simple.txt" | ConvertTo-Json
 
-- Test csv file import 
+- Test csv file import
 Invoke-RestMethod `
   -Uri http://localhost:8080/api/analysis/ingestCsv `
--Method POST `
+  -Method POST `
   -ContentType "text/csv" `
--InFile ".\simple.csv" | ConvertTo-Json
+  -InFile ".\large.csv" | ConvertTo-Json
+
+- Download the json responose analysis ( you should see the id number when u get the analysis through endpoints call)
+  Invoke-WebRequest `
+  -Uri "http://localhost:8080/api/analysis/1/download.json" `
+  -OutFile ".\analysis.json"
+
 
 ### Testing against the hosted API
 
-- Test the txt file 
+#### Test the txt file 
+
 Invoke-RestMethod `
   -Uri "https://spring-data-analysis-api.onrender.com/api/analysis/ingestCsv" `
 -Method POST `
   -ContentType "text/plain" `
 -InFile ".\simple.txt" | ConvertTo-Json
 
-- Test the csv file 
+#### Test the csv file 
+
 Invoke-RestMethod `
   -Uri "https://spring-data-analysis-api.onrender.com/api/analysis/ingestCsv" `
 -Method POST `
@@ -139,7 +147,6 @@ SHOW TABLES;
 SELECT * FROM your_table;
 You should see table as shown on the image:
 <img src="assets/img.png" width="800" height="800">
-
 
 ## Create a jar for this API 
 ./gradlew clean bootJar

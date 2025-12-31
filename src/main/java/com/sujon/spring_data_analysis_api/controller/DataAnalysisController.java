@@ -1,9 +1,15 @@
 package com.sujon.spring_data_analysis_api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.sujon.spring_data_analysis_api.controller.response.DataAnalysisResponse;
 import com.sujon.spring_data_analysis_api.exception.BadRequestException;
+import com.sujon.spring_data_analysis_api.exception.NotFoundException;
 import com.sujon.spring_data_analysis_api.service.DataAnalysisService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -33,6 +39,29 @@ public class DataAnalysisController {
     @GetMapping("/{id}")
     public DataAnalysisResponse getAnalysisById(@PathVariable Long id) {
         return dataAnalysisService.getAnalysisById(id);
+    }
+
+    // Allow download of json response
+    @GetMapping("/{id}/download.json")
+    public ResponseEntity<byte[]> downloadJson(@PathVariable Long id) {
+        try {
+            DataAnalysisResponse response = dataAnalysisService.getAnalysisById(id);
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+            byte[] prettyJsonBytes = mapper.writeValueAsBytes(response);
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition", "attachment; filename=\"analysis.json\"")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(prettyJsonBytes);
+
+        } catch (NotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new BadRequestException("Failed to generate JSON");
+        }
     }
 
     @DeleteMapping("/{id}")

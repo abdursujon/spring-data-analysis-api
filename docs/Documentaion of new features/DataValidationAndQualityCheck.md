@@ -1,9 +1,10 @@
 Data validation and quality check requirements
-## 1. Request-Level Validation
-- Content-Type must be `text/plain` or `text/csv`
-- Request body must not be empty
+## 1. Request-Level Validation and download 
+- Content-Type must be `text/plain` or `text/csv` (done)
+- Request body must not be empty (done)
 - Maximum CSV size enforced
 - UTF-8 encoding required
+- User can only access the id that they acquired through analysis, any other id must be revoked to access use and download
 
 ## 2. CSV Structure Validation
 - Single consistent delimiter
