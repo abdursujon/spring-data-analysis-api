@@ -36,12 +36,21 @@ This type of service is commonly used in data engineering and analytics platform
 
 In production environments, similar services often integrate with cloud storage (S3, Azure Blob), handle larger file formats (Parquet, Avro), and scale horizontally to process multiple files concurrently.
 
-## Prerequisites
+### For client who wants to get real data analysis
+- Note: please be aware for first call to the API it will take a couple of mins for the service to start, but on each next run you will get immediate analysis
 
-- Java 17 (JDK 17)
-- A Java-compatible IDE, such as IntelliJ IDEA
+#### Upload your file (txt, csv, json, excel through terminal for endpoints)
+**For example from a widows terminal:** 
 
-## Getting Started
+Invoke-RestMethod `
+  -Uri "https://spring-data-analysis-api.onrender.com/api/analysis/ingestCsv" `
+-Method POST `
+  -ContentType "text/plain" `
+-InFile ".\simple.csv" | ConvertTo-Json
+
+- Note: Change you file type and name with the file you are uploading 
+
+## If you want to contribute to the project this is how you can get started
 
 ### Build the Project
 ```bash
@@ -58,23 +67,23 @@ The service will start on `http://localhost:8080`
 ```bash
 ./gradlew clean bootRun
 ```
-## Stop local host before rerun 
+
+## Stop local host before rerun if you get error on clean bootRun
 - Get-NetTCPConnection -LocalPort 8080 | Select-Object -ExpandProperty OwningProcess
+
 ### Run Tests
 ```bash
 ./gradlew test
 ```
-The test result will be printed on the terminal.
-Alternatively, the result can be viewed on the browser: file:///C:/Projects/spring-etl-validator/build/reports/tests/test/index.html
-Note: file:///C:/Projects/  (will depend on the path you decide to download the project)
 
+The test result will be printed on the terminal.
+Alternatively, the result can be viewed on the browser: <your-project-path>/build/reports/tests/test/index.html
 
 ### Test the API Manually
 
 Once the application is running, you can interact with the API using Swagger UI:
 
 **Open in your browser:** `http://localhost:8080/swagger-ui/index.html`
-
 This provides an interactive interface to test API endpoints without needing additional tools like Postman or curl.
 
 
@@ -87,21 +96,19 @@ This provides an interactive interface to test API endpoints without needing add
 
 # Example test case from Windows terminal 
 
-### Testing locally 
+### For Developer Testing locally 
 
-- Test txt file import
+**File import and analysis through terminal**
+- First cd into the resource directory or you can specify any directory where you have the resource to the Infile name.
+- Then run this command for txt file analysis (the txt file is totally up to you change the file type to try different items).
+- Allowed upload types are txt, csv (JSON, and Excel will be available soon). 
+
 Invoke-RestMethod `
   -Uri http://localhost:8080/api/analysis/ingestCsv `
 -Method POST `
   -ContentType "text/plain" `
--InFile ".\simple.txt" | ConvertTo-Json
+-InFile ".\simple.csv" | ConvertTo-Json
 
-- Test csv file import
-Invoke-RestMethod `
-  -Uri http://localhost:8080/api/analysis/ingestCsv `
-  -Method POST `
-  -ContentType "text/csv" `
-  -InFile ".\large.csv" | ConvertTo-Json
 
 - Download the json responose analysis ( you should see the id number when u get the analysis through endpoints call)
   Invoke-WebRequest `
@@ -109,23 +116,6 @@ Invoke-RestMethod `
   -OutFile ".\analysis.json"
 
 
-### Testing against the hosted API
-
-#### Test the txt file 
-
-Invoke-RestMethod `
-  -Uri "https://spring-data-analysis-api.onrender.com/api/analysis/ingestCsv" `
--Method POST `
-  -ContentType "text/plain" `
--InFile ".\simple.txt" | ConvertTo-Json
-
-#### Test the csv file 
-
-Invoke-RestMethod `
-  -Uri "https://spring-data-analysis-api.onrender.com/api/analysis/ingestCsv" `
--Method POST `
-  -ContentType "text/csv" `
--InFile ".\simple.csv" | ConvertTo-Json
 
 
 ## You can view the h2 console and query different commands by following below procedure
