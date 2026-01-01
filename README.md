@@ -128,7 +128,7 @@ http://localhost:8080/h2-console
 
 Login (default, you can change the properties if you like in application.yml:
 JDBC URL: jdbc:h2:mem:testdb
-User Name: sa
+Username: sa
 Password:
 
 Click Connect.
