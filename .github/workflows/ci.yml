@@ -38,7 +38,7 @@ jobs:
           source: build/libs/spring-data-analysis-api.jar
           target: /home/abdur_sujon_dev/
 
-      - name: Restart app on VM
+      - name: Restart systemd service
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ secrets.VM_HOST }}
@@ -46,9 +46,5 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
           script: |
-            # Kill old instance if running
-            pkill -f 'java -jar spring-data-analysis-api.jar' || true
-            # Start in background using nohup so it survives session end
-            nohup java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar \
-              > /home/abdur_sujon_dev/app.log 2>&1 &
-            echo "App started"
+            sudo systemctl restart spring-data-analysis-api
+            sudo systemctl status spring-data-analysis-api --no-pager
