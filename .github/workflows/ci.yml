@@ -38,13 +38,13 @@ jobs:
           source: build/libs/spring-data-analysis-api.jar
           target: /home/abdur_sujon_dev/
 
-      - name: Restart systemd service
-        uses: appleboy/ssh-action@v0.1.5
+      - name: Copy JAR to VM
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
-          script: |
-            sudo systemctl restart spring-data-analysis-api
-            sudo systemctl status spring-data-analysis-api --no-pager
+          source: build/libs/spring-data-analysis-api.jar
+          target: /home/abdur_sujon_dev/spring-data-analysis-api.jar
+
