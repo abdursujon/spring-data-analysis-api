@@ -47,5 +47,8 @@ jobs:
           port: 22
           script: |
             pkill -f 'java -jar spring-data-analysis-api.jar' || true
-            nohup java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar > /home/abdur_sujon_dev/app.log 2>&1 &
+            java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar > /home/abdur_sujon_dev/app.log 2>&1 &
+            sleep 5
+            ps aux | grep spring-data-analysis-api.jar
+      
 
