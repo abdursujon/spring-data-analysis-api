@@ -28,6 +28,7 @@ jobs:
       - name: Build JAR
         run: ./gradlew bootJar
 
+
       - name: Copy JAR to VM
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -36,6 +37,6 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
           source: build/libs/spring-data-analysis-api.jar
-          target: /home/abdur_sujon_dev/build/libs/spring-data-analysis-api.jar
+          target: /home/abdur_sujon_dev/spring-data-analysis-api.jar
 
 
