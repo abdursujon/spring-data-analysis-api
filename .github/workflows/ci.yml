@@ -36,5 +36,6 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
           source: build/libs/spring-data-analysis-api.jar
-          target: /home/abdur_sujon_dev/spring-data-analysis-api.jar
+          target: /home/abdur_sujon_dev/build/libs/spring-data-analysis-api.jar
+
 
