@@ -104,19 +104,15 @@ This provides an interactive interface to test API endpoints without needing add
 - Allowed upload types are txt, csv (JSON, and Excel will be available soon). 
 
 Invoke-RestMethod `
-  -Uri http://localhost:8080/api/analysis/ingestCsv `
+  -Uri http://104.198.32.13:8080/api/analysis/ingestCsv `
 -Method POST `
-  -ContentType "text/plain" `
--InFile ".\simple.csv" | ConvertTo-Json
-
+  -ContentType "text/csv" `
+-InFile ".\large.csv" | ConvertTo-Json
 
 - Download the json responose analysis ( you should see the id number when u get the analysis through endpoints call)
   Invoke-WebRequest `
-  -Uri "http://localhost:8080/api/analysis/1/download.json" `
+  -Uri "http://104.198.32.13:8080/api/analysis/1/download.json" `
   -OutFile ".\analysis.json"
-
-
-
 
 ## You can view the h2 console and query different commands by following below procedure
 Note: This is not required, do this only if you are interested in knowing how h2 works under the hood.
