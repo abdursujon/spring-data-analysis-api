@@ -48,3 +48,4 @@ jobs:
           script: |
             pkill -f 'java -jar spring-data-analysis-api.jar' || true
             nohup java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar > /home/abdur_sujon_dev/app.log 2>&1 &
+
