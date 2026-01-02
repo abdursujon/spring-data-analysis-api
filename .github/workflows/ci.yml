@@ -46,9 +46,9 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
           script: |
+            # Kill old instance if running
             pkill -f 'java -jar spring-data-analysis-api.jar' || true
-            java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar > /home/abdur_sujon_dev/app.log 2>&1 &
-            sleep 5
-            ps aux | grep spring-data-analysis-api.jar
-      
-
+            # Start in background using nohup so it survives session end
+            nohup java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar \
+              > /home/abdur_sujon_dev/app.log 2>&1 &
+            echo "App started"
