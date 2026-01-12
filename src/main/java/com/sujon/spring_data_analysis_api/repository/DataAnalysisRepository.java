@@ -10,8 +10,9 @@ import java.util.Optional;
  */
 @Repository
 public interface DataAnalysisRepository extends JpaRepository<DataAnalysisEntity, Long> {
+    // Added find by content hash for duplicate api call check for same file
+    Optional<DataAnalysisEntity> findByContentHash(String contentHash);
 }
 
-// Added find by content hash for duplicate api call check for same file
-Optional<DataAnalysisEntity> findByContentHash(String contentHash);
+
 

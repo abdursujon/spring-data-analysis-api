@@ -1,8 +1,8 @@
 {
-  "id" : 1,
+  "id" : 8,
   "numberOfRows" : 3,
   "numberOfColumns" : 3,
-  "totalCharacters" : 110,
+  "totalCharacters" : 106,
   "columnStatistics" : [ {
     "columnName" : "driver",
     "nullCount" : 0,
@@ -16,5 +16,6 @@
     "nullCount" : 0,
     "uniqueCount" : 3
   } ],
-  "createdAt" : "2025-12-31T16:28:51.093971Z"
+  "createdAt" : "2026-01-12T23:23:16.52632Z",
+  "alreadyExists" : true
 }

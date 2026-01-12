@@ -222,20 +222,22 @@ public class DataAnalysisService {
         DataAnalysisEntity entity = dataAnalysisRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Analysis not found"));
 
-        return new DataAnalysisResponse(
-                entity.getId(),
-                entity.getNumberOfRows(),
-                entity.getNumberOfColumns(),
-                entity.getTotalCharacters(),
-                entity.getColumnStatistics().stream()
-                        .map(s -> new ColumnStatistics(
-                                s.getColumnName(),
-                                s.getNullCount(),
-                                s.getUniqueCount()
-                        ))
-                        .toList(),
-                entity.getCreatedAt()
-        );
+                return new DataAnalysisResponse(
+                    entity.getId(),
+                    entity.getNumberOfRows(),
+                    entity.getNumberOfColumns(),
+                    entity.getTotalCharacters(),
+                    entity.getColumnStatistics().stream()
+                            .map(s -> new ColumnStatistics(
+                                    s.getColumnName(),
+                                    s.getNullCount(),
+                                    s.getUniqueCount()
+                            ))
+                            .toList(),
+                    entity.getCreatedAt(),
+                    true
+                );
+
     }
 
     public void deleteAnalysisById(Long id) {

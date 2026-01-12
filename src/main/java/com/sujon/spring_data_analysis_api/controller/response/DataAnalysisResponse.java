@@ -13,8 +13,8 @@ public record DataAnalysisResponse(
         int numberOfColumns,
         long totalCharacters,
         List<ColumnStatistics> columnStatistics,
-        OffsetDateTime createdAt
-        private boolean alreadyExists;
+        OffsetDateTime createdAt,
+        boolean alreadyExists
 ) {
 }
 
