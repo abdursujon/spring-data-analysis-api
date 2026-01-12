@@ -14,6 +14,7 @@ public record DataAnalysisResponse(
         long totalCharacters,
         List<ColumnStatistics> columnStatistics,
         OffsetDateTime createdAt
+        private boolean alreadyExists;
 ) {
 }
 
