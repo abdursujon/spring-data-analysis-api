@@ -17,8 +17,13 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 /**
  * REST endpoints for CSV data analysis.
  */
-@RestController
+@RestController   
 @RequestMapping("/api/analysis")
+@CrossOrigin(
+    origins = "*",
+    allowedHeaders = "*",
+    methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.DELETE, RequestMethod.OPTIONS}
+) 
 @RequiredArgsConstructor
 public class DataAnalysisController {
 
