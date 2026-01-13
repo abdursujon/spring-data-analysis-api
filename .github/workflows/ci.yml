@@ -28,7 +28,6 @@ jobs:
       - name: Build JAR
         run: ./gradlew bootJar
 
-
       - name: Copy JAR to VM
         uses: appleboy/scp-action@v0.1.4
         with:
@@ -36,8 +35,8 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
-          source: build/libs/spring-data-analysis-api.jar
-          target: /home/abdur_sujon_dev/spring-data-analysis-api.jar
+          source: build/libs/*.jar
+          target: /home/abdur_sujon_dev/
 
       - name: Restart backend on VM
         uses: appleboy/ssh-action@v1.0.3
@@ -47,8 +46,8 @@ jobs:
           key: ${{ secrets.VM_SSH_KEY }}
           port: 22
           script: |
-            set -e
-            pkill -f spring-data-analysis-api.jar || true
+            pkill -f spring-data-analysis-api || true
             nohup java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar > app.log 2>&1 &
+
 
 
