@@ -36,21 +36,18 @@ This type of service is commonly used in data engineering and analytics platform
 
 In production environments, similar services often integrate with cloud storage (S3, Azure Blob), handle larger file formats (Parquet, Avro), and scale horizontally to process multiple files concurrently.
 
-### For client who wants to get real data analysis
-- Note: please be aware for first call to the API it will take a couple of mins for the service to start, but on each next run you will get immediate analysis
+### How call the endpoints for analysis
 
-#### Upload your file (txt, csv, json, excel through terminal for endpoints)
-**For example from a widows terminal:** 
+#### Upload your txt, csv, json, excel through terminal 
 
-Invoke-RestMethod `
-  -Uri "https://spring-data-analysis-api.onrender.com/api/analysis/ingestCsv" `
--Method POST `
-  -ContentType "text/plain" `
--InFile ".\simple.csv" | ConvertTo-Json
+-Linux
+-Windows
+-Mac
 
-- Note: Change you file type and name with the file you are uploading 
 
 ## If you want to contribute to the project this is how you can get started
+
+- First clone the repo: git clone https://github.com/abdursujon/spring-data-analysis-api.git
 
 ### Build the Project
 ```bash

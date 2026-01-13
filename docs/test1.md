@@ -112,3 +112,7 @@ Run the Part 1 tests:
 This suite provides strong confidence that the CSV ingestion layer behaves correctly
 under real-world data engineering scenarios.
 
+## Test locally 
+curl -X POST http://localhost:8080/api/analysis/ingestCsv \
+-H "Content-Type: text/csv" \
+--data-binary @large.csv
