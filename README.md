@@ -44,7 +44,6 @@ In production environments, similar services often integrate with cloud storage 
 -Windows
 -Mac
 
-
 ## If you want to contribute to the project this is how you can get started
 
 - First clone the repo: git clone https://github.com/abdursujon/spring-data-analysis-api.git
