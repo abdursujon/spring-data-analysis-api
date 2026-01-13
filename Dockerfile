@@ -2,11 +2,12 @@ FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 COPY . .
 RUN chmod +x gradlew
-RUN ./gradlew bootJar -x test
+RUN ./gradlew bootJar
 
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-COPY --from=build /app/build/libs/spring-data-analysis-api.jar spring-data-analysis-api.jar
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-CMD ["java", "-jar", "spring-data-analysis-api.jar"]
+CMD ["java","-jar","app.jar"]
+
 
