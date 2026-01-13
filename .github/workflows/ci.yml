@@ -39,4 +39,16 @@ jobs:
           source: build/libs/spring-data-analysis-api.jar
           target: /home/abdur_sujon_dev/spring-data-analysis-api.jar
 
+      - name: Restart backend on VM
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+            pkill -f spring-data-analysis-api.jar || true
+            nohup java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar > app.log 2>&1 &
+
 
