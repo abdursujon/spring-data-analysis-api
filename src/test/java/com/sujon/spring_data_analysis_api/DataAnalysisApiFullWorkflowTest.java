@@ -22,12 +22,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Integration tests for CSV analysis endpoints: ingest, retrieve, delete, and download
  */
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class DataAnalysisApiFullWorkflowTest {
 
     private String performAndLog(MockHttpServletRequestBuilder requestBuilder) throws Exception {

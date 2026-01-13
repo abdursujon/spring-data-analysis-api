@@ -1,0 +1,32 @@
+{
+  "id" : 2,
+  "numberOfRows" : 10,
+  "numberOfColumns" : 6,
+  "totalCharacters" : 471,
+  "columnStatistics" : [ {
+    "columnName" : "driver",
+    "nullCount" : 0,
+    "uniqueCount" : 10
+  }, {
+    "columnName" : "number",
+    "nullCount" : 0,
+    "uniqueCount" : 10
+  }, {
+    "columnName" : "team",
+    "nullCount" : 0,
+    "uniqueCount" : 6
+  }, {
+    "columnName" : "nationality",
+    "nullCount" : 0,
+    "uniqueCount" : 7
+  }, {
+    "columnName" : "podiums",
+    "nullCount" : 0,
+    "uniqueCount" : 10
+  }, {
+    "columnName" : "championships",
+    "nullCount" : 0,
+    "uniqueCount" : 4
+  } ],
+  "createdAt" : "2026-01-02T03:07:36.618763Z"
+}
