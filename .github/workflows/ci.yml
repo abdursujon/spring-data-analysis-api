@@ -37,6 +37,7 @@ jobs:
           port: 22
           source: build/libs/*.jar
           target: /home/abdur_sujon_dev/
+          overwrite: true
 
       - name: Restart backend on VM
         uses: appleboy/ssh-action@v1.0.3
@@ -47,10 +48,4 @@ jobs:
           port: 22
           script: |
             pkill -f spring-data-analysis-api || true
-            nohup java -jar /home/abdur_sujon_dev/spring-data-analysis-api.jar > app.log 2>&1 &
-            sleep 2
-            exit 0
-
-
-
-
+            nohup java -jar /home/abdur_sujon_dev/*.jar > app.log 2>&1 &
