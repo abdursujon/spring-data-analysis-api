@@ -13,9 +13,8 @@ The focus is on production-style backend design using modern Java, clear API
 contracts, test-driven development, and extensibility for future features such 
 as additional metrics, storage backends, or file formats.</p>
 
-
+---
 ## Overview
-
 This is a data analysis service built with:
 - **Java 17**
 - **Spring Boot 3** (Web, JPA, Actuator)
@@ -24,27 +23,17 @@ This is a data analysis service built with:
 - **Lombok** for reducing boilerplate code
 - **JUnit 5** for testing
 - Google Cloud Platform for deployment
+- The service provides REST API endpoints for ingesting and analyzing data, with results persisted to an H2 database.
+
+---
+
+## How to use 
 - The API is running at: https://spring-data-analysis-506639246506.europe-west2.run.app/
+- You can upload file through dedicated react front end website: https://github.com/abdursujon/transform-my-raw-data.git
+- Or you can ingest file directly from your terminal as below
 
-The service provides REST API endpoints for ingesting and analyzing data, with results persisted to an H2 database.
-
-### Real-World Use Cases
-
-This type of service is commonly used in data engineering and analytics platforms where users need to:
-- **Explore unknown datasets** - Quickly understand the structure, data types, and basic statistics of CSV files without manual inspection
-- **Data quality assessment** - Automatically detect data types, identify null values, and calculate statistical summaries to assess data completeness
-- **ETL pipeline validation** - Verify data format and content before loading into data warehouses or lakes
-- **Self-service analytics** - Enable business users to upload and analyze their own datasets through a simple API
-- **Data profiling** - Generate metadata and summary statistics for data catalogs and governance tools
-
-In production environments, similar services often integrate with cloud storage (S3, Azure Blob), handle larger file formats (Parquet, Avro), and scale horizontally to process multiple files concurrently.
-
-### How to call the endpoints for analysis
-#### Upload your txt, csv, json, excel through terminal
-(You must be in the file directory or provide full path)
-
-#### Example for Linux, windows, and mac 
-
+#### Example for Linux, windows, and mac
+(must be in the file directory or provide full path)
 - **Linux**
 ```bash
 curl -X POST \
@@ -68,9 +57,21 @@ curl -X POST \
   --data-binary @large.csv \
   https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv
 ```
+---
 
+## Real-World Use Cases
+
+This type of service is commonly used in data engineering and analytics platforms where users need to:
+- **Explore unknown datasets** - Quickly understand the structure, data types, and basic statistics of CSV files without manual inspection
+- **Data quality assessment** - Automatically detect data types, identify null values, and calculate statistical summaries to assess data completeness
+- **ETL pipeline validation** - Verify data format and content before loading into data warehouses or lakes
+- **Self-service analytics** - Enable business users to upload and analyze their own datasets through a simple API
+- **Data profiling** - Generate metadata and summary statistics for data catalogs and governance tools
+
+In production environments, similar services often integrate with cloud storage (S3, Azure Blob), handle larger file formats (Parquet, Avro), and scale horizontally to process multiple files concurrently.
+
+---
 ## If you want to contribute to the project this is how you can get started
-
 - First clone the repo: git clone https://github.com/abdursujon/spring-data-analysis-api.git
 
 ### Build the Project
@@ -100,10 +101,10 @@ The service will start on `http://localhost:8080`
 The test result will be printed on the terminal.
 Alternatively, the result can be viewed on the browser: <your-project-path>/build/reports/tests/test/index.html
 
+---
 ### Test the API Manually
 
 Once the application is running, you can interact with the API using Swagger UI:
-
 **Open in your browser:** `http://localhost:8080/swagger-ui/index.html`
 This provides an interactive interface to test API endpoints without needing additional tools like Postman or curl.
 
@@ -115,7 +116,8 @@ This provides an interactive interface to test API endpoints without needing add
 - `GET /api/analysis/{id}` - Retrieve a previously analyzed CSV by ID 
 - `DELETE /api/analysis/{id}` - Delete an analysis by ID
 
-# Example test case from Windows terminal 
+---
+## Example test case from Linux terminal 
 
 ### For Developer Testing locally 
 
@@ -124,17 +126,19 @@ This provides an interactive interface to test API endpoints without needing add
 - Then run this command for txt file analysis (the txt file is totally up to you change the file type to try different items).
 - Allowed upload types are txt, csv (JSON, and Excel will be available soon). 
 
-Invoke-RestMethod `
-  -Uri http://104.198.32.13:8080/api/analysis/ingestCsv `
--Method POST `
-  -ContentType "text/csv" `
--InFile ".\large.csv" | ConvertTo-Json
+```bash
+curl -X POST \
+  -H "Content-Type: text/csv" \
+  --data-binary @large.csv \
+  http://104.198.32.13:8080/api/analysis/ingestCsv
+```
 
 - Download the json responose analysis ( you should see the id number when u get the analysis through endpoints call)
-  Invoke-WebRequest `
-  -Uri "http://104.198.32.13:8080/api/analysis/1/download.json" `
-  -OutFile ".\analysis.json"
-
+```bash
+curl -o analysis.json \
+  http://104.198.32.13:8080/api/analysis/1/download.json
+```
+---
 ## You can view the h2 console and query different commands by following below procedure
 Note: This is not required, do this only if you are interested in knowing how h2 works under the hood.
 
@@ -155,6 +159,6 @@ SELECT * FROM your_table;
 You should see table as shown on the image:
 <img src="assets/img.png" width="800" height="800">
 
-## Create a jar for this API 
+## How to create a Jar 
 ./gradlew clean bootJar
 java -jar build/libs/spring-data-analysis-api.jar
