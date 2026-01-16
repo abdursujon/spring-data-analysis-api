@@ -13,6 +13,7 @@ The focus is on production-style backend design using modern Java, clear API
 contracts, test-driven development, and extensibility for future features such 
 as additional metrics, storage backends, or file formats.</p>
 
+
 ## Overview
 
 This is a data analysis service built with:
@@ -22,6 +23,8 @@ This is a data analysis service built with:
 - **H2 Database** for lightweight in-memory persistence
 - **Lombok** for reducing boilerplate code
 - **JUnit 5** for testing
+- Google Cloud Platform for deployment
+- The API is running at: https://spring-data-analysis-506639246506.europe-west2.run.app/
 
 The service provides REST API endpoints for ingesting and analyzing data, with results persisted to an H2 database.
 
@@ -36,13 +39,35 @@ This type of service is commonly used in data engineering and analytics platform
 
 In production environments, similar services often integrate with cloud storage (S3, Azure Blob), handle larger file formats (Parquet, Avro), and scale horizontally to process multiple files concurrently.
 
-### How call the endpoints for analysis
+### How to call the endpoints for analysis
+#### Upload your txt, csv, json, excel through terminal
+(You must be in the file directory or provide full path)
 
-#### Upload your txt, csv, json, excel through terminal 
+#### Example for Linux, windows, and mac 
 
--Linux
--Windows
--Mac
+- **Linux**
+```bash
+curl -X POST \
+  -H "Content-Type: text/csv" \
+  --data-binary @large.csv \
+  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv
+```
+
+- **Windows**
+```bash
+curl -X POST `
+  -H "Content-Type: text/csv" `
+  --data-binary "@large.csv" `
+  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv
+```
+
+- **Mac**
+```bash
+curl -X POST \
+  -H "Content-Type: text/csv" \
+  --data-binary @large.csv \
+  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv
+```
 
 ## If you want to contribute to the project this is how you can get started
 

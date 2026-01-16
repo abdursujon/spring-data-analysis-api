@@ -171,3 +171,13 @@ Cloud Run requirements:
 - No GitHub Actions required (can be added later)
 - Cloud Run free tier is sufficient for low traffic APIs
 
+# After changes made in git repo this has be done to make changes in api
+git reset --hard
+git clean -fd
+git pull
+./gradlew bootJar
+gcloud builds submit --tag europe-west2-docker.pkg.dev/spring-data-analysis-api/app-repo/app
+gcloud run deploy spring-data-analysis \
+--image europe-west2-docker.pkg.dev/spring-data-analysis-api/app-repo/app \
+--region europe-west2 \
+--allow-unauthenticated
