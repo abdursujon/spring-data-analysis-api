@@ -40,6 +40,7 @@ curl -X POST \
   -H "Content-Type: text/csv" \
   --data-binary @large.csv \
   https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv
+  http://localhost:8080/api/analysis/ingestCsv | jq
 ```
 
 - **Windows**
@@ -47,7 +48,7 @@ curl -X POST \
 curl -X POST `
   -H "Content-Type: text/csv" `
   --data-binary "@large.csv" `
-  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv
+  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv | jq
 ```
 
 - **Mac**
@@ -55,7 +56,7 @@ curl -X POST `
 curl -X POST \
   -H "Content-Type: text/csv" \
   --data-binary @large.csv \
-  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv
+  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv | jq
 ```
 ---
 
@@ -130,13 +131,13 @@ This provides an interactive interface to test API endpoints without needing add
 curl -X POST \
   -H "Content-Type: text/csv" \
   --data-binary @large.csv \
-  http://104.198.32.13:8080/api/analysis/ingestCsv
+  http://localhost:8080/api/analysis/ingestCsv | jq
 ```
 
 - Download the json responose analysis ( you should see the id number when u get the analysis through endpoints call)
 ```bash
 curl -o analysis.json \
-  http://104.198.32.13:8080/api/analysis/1/download.json
+ http://localhost:8080/api/analysis/1/download.json | jq
 ```
 ---
 ## You can view the h2 console and query different commands by following below procedure

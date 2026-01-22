@@ -31,7 +31,7 @@ public class DataAnalysisEntity {
     @Column(name = "original_data", nullable = false, columnDefinition = "TEXT")
     private String originalData;
     
-    // Added content_hash for checking duplicate call
+    // content_hash for checking duplicate call
     @Column(name = "content_hash", nullable = false, unique = true, length = 64)
     private String contentHash;
 
