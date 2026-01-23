@@ -1,23 +1,27 @@
-## What to Consider
-
-- **User Value**  
-  What would make this service genuinely useful to engineers and ML pipelines?
-
-- **Technical Fit**  
-  How the feature complements existing analysis and does not duplicate responsibility.
-
-- **Scope**  
-  Features must be realistic, implementable, and production-oriented.
-
-- **Quality**  
-  One well-implemented feature is better than many half-baked ones.
-
+# Implemented features: 
+1. Null and empty value detection via blank checks and nullCounts
+2. Row shape validation by enforcing equal column count per row
+3. Header presence validation by rejecting blank first line
+4. Basic CSV structure validation by rejecting malformed rows
+5. Per-column uniqueness tracking using Set
+6. Numeric type detection using parse attempt per value
+7. Min value calculation for numeric columns
+8. Max value calculation for numeric columns
+9. Mean calculation for numeric columns
+10. Median calculation for numeric columns
+11. Standard deviation calculation for numeric columns
+12. Percentile calculation for numeric columns
+13. Row counting with blank-line skipping
+14. Total character count calculation
+15. Content hashing for duplicate dataset detection
+16. Cached analysis reuse via hash lookup
+17. Persistent storage of analysis metadata
+18. Persistent storage of per-column statistics
+19. Max file limit 5mb/1,000,000 imposed 
 ---
-# Some important ideas 
 
-- Data validation and quality checks
-- Export functionality (JSON, Excel, etc.)
-- Statistical analysis (mean, median, standard deviation) x
+# Some important ideas
+- Export functionality (JSON, Excel)
 - Data filtering or transformation capabilities
 - Batch processing of multiple CSVs
 - Historical tracking and comparison
@@ -26,18 +30,6 @@
 - Missing data handling strategies
 
 ## Feature Scope
-Important ones
-⦁	Data validation and quality checks
-⦁	Export functionality (JSON, Excel, etc.)
-⦁	Statistical analysis (mean, median, standard deviation)
-⦁	Data filtering or transformation capabilities
-⦁	Batch processing of multiple CSVs
-⦁	Historical tracking and comparison
-⦁	Data visualization endpoints
-⦁	Column correlation analysis
-⦁	Missing data handling strategies
-
-
 - Data ingestion and parsing
 - Data validation and quality checks
 - Schema inference and column type detection
@@ -67,24 +59,3 @@ Important ones
 - Audit trail and lineage tracking
 - Remediation recommendation generation
 - Confidence scoring for predictions
-
----
-
-## What is Delivered
-
-1. **Documentation**
-    - Feature definitions and scope
-    - API contracts
-    - Data models and schemas
-    - Assumptions and limitations
-
-2. **Implementation**
-    - Deterministic analysis logic
-    - REST endpoints
-    - Persistence layer
-    - Feature extraction pipeline
-
-3. **Tests**
-    - Unit tests for core logic
-    - Integration tests for API endpoints
-    - Validation and edge-case coverage

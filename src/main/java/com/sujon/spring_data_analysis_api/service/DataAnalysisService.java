@@ -24,37 +24,19 @@ import java.util.HexFormat;
 
 /**
  * Service layer containing business logic for CSV data analysis.
- * <p>
- * This service is responsible for:
- * <ul>
- *   <li>Parsing and validating CSV data</li>
- *   <li>Calculating column-level statistics (null counts, unique counts)</li>
- *   <li>Computing statistical profiling metrics for numeric columns (min, max, mean, median, std, percentiles)</li>
- *   <li>Persisting analysis results to the database</li>
- *   <li>Deduplicating identical CSV content using SHA-256 hashing</li>
- * </ul>
  */
 @Service
 @RequiredArgsConstructor
 public class DataAnalysisService {
+
+    private static final long MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+    private static final long MAX_CELL_COUNT = 1_000_000;
 
     private final DataAnalysisRepository dataAnalysisRepository;
     private final ColumnStatisticsRepository columnStatisticsRepository;
 
     /**
      * Generates a SHA-256 hash of the given input string.
-     * <p>
-     * This method is used to uniquely identify the content of an uploaded CSV file.
-     * The same input content will always produce the same hash value, while any
-     * change in the content will result in a completely different hash.
-     * <p>
-     * Purpose in this application:
-     * <ul>
-     *   <li>Prevents duplicate data analysis for identical CSV content</li>
-     *   <li>Enables fast lookup of existing analysis results</li>
-     *   <li>Ensures new analysis is triggered only when file content changes</li>
-     * </ul>
-     *
      * @param input the raw CSV data as a String
      * @return a 64-character hexadecimal SHA-256 hash representing the input content
      * @throws RuntimeException if the SHA-256 algorithm is not available
@@ -71,17 +53,6 @@ public class DataAnalysisService {
 
     /**
      * Normalizes CSV content for consistent hashing.
-     * <p>
-     * This ensures that logically identical files produce the same hash
-     * regardless of minor formatting differences.
-     * <p>
-     * Normalization rules applied:
-     * <ul>
-     *   <li>Convert Windows line endings (CRLF) to Unix line endings (LF)</li>
-     *   <li>Trim leading and trailing whitespace from each line</li>
-     *   <li>Remove empty lines</li>
-     * </ul>
-     *
      * @param data the raw CSV content
      * @return normalized CSV content suitable for hashing
      */
@@ -97,10 +68,6 @@ public class DataAnalysisService {
 
     /**
      * Attempts to parse a string value as a Double.
-     * <p>
-     * Used during CSV processing to determine if a column contains numeric data.
-     * Handles null, blank, and non-numeric strings gracefully by returning null.
-     *
      * @param value the string value to parse
      * @return the parsed Double value, or null if the value is blank or not a valid number
      */
@@ -117,9 +84,6 @@ public class DataAnalysisService {
 
     /**
      * Calculates the arithmetic mean (average) of a list of numeric values.
-     * <p>
-     * The mean is computed as the sum of all values divided by the count of values.
-     *
      * @param values list of Double values to calculate the mean from
      * @return the arithmetic mean, or null if the list is empty
      */
@@ -136,10 +100,6 @@ public class DataAnalysisService {
 
     /**
      * Calculates the median (50th percentile) of a sorted list of values.
-     * <p>
-     * For an odd number of values, returns the middle element.
-     * For an even number of values, returns the average of the two middle elements.
-     *
      * @param sortedValues a pre-sorted list of Double values (ascending order)
      * @return the median value, or null if the list is empty
      */
@@ -157,10 +117,6 @@ public class DataAnalysisService {
 
     /**
      * Calculates the population standard deviation of a list of values.
-     * <p>
-     * Standard deviation measures the amount of variation or dispersion in a dataset.
-     * This implementation uses the population formula: sqrt(sum((x - mean)²) / n)
-     *
      * @param values list of Double values
      * @param mean the pre-calculated arithmetic mean of the values
      * @return the population standard deviation, or null if the list is empty or mean is null
@@ -180,13 +136,6 @@ public class DataAnalysisService {
 
     /**
      * Calculates a specific percentile from a sorted list of values using linear interpolation.
-     * <p>
-     * Percentiles indicate the value below which a given percentage of observations fall.
-     * For example, the 25th percentile is the value below which 25% of the data falls.
-     * <p>
-     * This method uses the linear interpolation method between the two closest ranks
-     * when the percentile falls between two data points.
-     *
      * @param sortedValues a pre-sorted list of Double values (ascending order)
      * @param percentile the percentile to calculate (0-100)
      * @return the interpolated percentile value, or null if the list is empty
@@ -210,13 +159,6 @@ public class DataAnalysisService {
 
     /**
      * Analyzes CSV data and returns statistical analysis results.
-     * <p>
-     * This is the main entry point for CSV analysis. It implements content-based
-     * deduplication using SHA-256 hashing to avoid redundant processing of identical data.
-     * <p>
-     * If the same CSV content has been analyzed before, the existing analysis is returned
-     * with the {@code alreadyExists} flag set to true. Otherwise, a new analysis is performed.
-     *
      * @param data the raw CSV content as a string
      * @return DataAnalysisResponse containing analysis results and metadata
      * @throws BadRequestException if the CSV data is null, blank, or invalid
@@ -225,6 +167,11 @@ public class DataAnalysisService {
 
         if (data == null || data.isBlank()) {
             throw new BadRequestException("Invalid CSV");
+        }
+
+        long fileSizeBytes = data.getBytes(java.nio.charset.StandardCharsets.UTF_8).length;
+        if (fileSizeBytes > MAX_FILE_SIZE_BYTES) {
+            throw new BadRequestException("File size exceeds maximum allowed size of 5MB");
         }
 
         String contentHash = sha256(normalizeForHash(data));
@@ -264,24 +211,6 @@ public class DataAnalysisService {
 
     /**
      * Performs full CSV parsing, statistical analysis, and database persistence.
-     * <p>
-     * This private method handles the complete analysis workflow for new CSV content:
-     * <ol>
-     *   <li>Validates CSV structure (header row, consistent column count)</li>
-     *   <li>Parses each row and collects per-column statistics</li>
-     *   <li>Detects numeric columns and computes statistical profiling metrics</li>
-     *   <li>Persists the analysis entity and column statistics to the database</li>
-     * </ol>
-     * <p>
-     * For numeric columns, the following statistics are calculated:
-     * <ul>
-     *   <li>Min and Max values</li>
-     *   <li>Arithmetic Mean</li>
-     *   <li>Median (50th percentile)</li>
-     *   <li>Population Standard Deviation</li>
-     *   <li>Percentiles: 25th, 50th, 75th, 90th, 95th, 99th</li>
-     * </ul>
-     *
      * @param data the raw CSV content
      * @param contentHash the pre-computed SHA-256 hash of the normalized content
      * @return DataAnalysisResponse containing the newly created analysis results
@@ -301,6 +230,11 @@ public class DataAnalysisService {
 
         String[] headers = lines[0].split(",", -1);
         int numberOfColumns = headers.length;
+
+        long estimatedCellCount = (long) (lines.length - 1) * numberOfColumns;
+        if (estimatedCellCount > MAX_CELL_COUNT) {
+            throw new BadRequestException("CSV exceeds maximum allowed cell count of one hundred thousand cells");
+        }
 
         int numberOfRows = 0;
         int[] nullCounts = new int[numberOfColumns];
@@ -450,10 +384,6 @@ public class DataAnalysisService {
 
     /**
      * Retrieves a previously stored analysis by its unique identifier.
-     * <p>
-     * Fetches the analysis entity from the database and maps it to a response DTO,
-     * including all column statistics and statistical profiling data.
-     *
      * @param id the unique identifier of the analysis to retrieve
      * @return DataAnalysisResponse containing the analysis results
      * @throws NotFoundException if no analysis exists with the given ID
@@ -496,11 +426,6 @@ public class DataAnalysisService {
 
     /**
      * Deletes an analysis record and its associated column statistics from the database.
-     * <p>
-     * Due to the cascade delete configuration on the entity relationship,
-     * all associated ColumnStatisticsEntity records are automatically removed
-     * when the parent DataAnalysisEntity is deleted.
-     *
      * @param id the unique identifier of the analysis to delete
      * @throws NotFoundException if no analysis exists with the given ID
      */
