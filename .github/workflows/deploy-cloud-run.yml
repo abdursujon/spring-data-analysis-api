@@ -78,3 +78,8 @@ jobs:
 
       - name: Show deployment URL
         run: echo "Deployed to ${{ steps.deploy.outputs.url }}"
+
+      - name: Debug gcloud identity
+        run: |
+          gcloud auth list
+          gcloud config list  
