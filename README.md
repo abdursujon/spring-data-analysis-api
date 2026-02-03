@@ -36,27 +36,16 @@ This is a data analysis service built with:
 (must be in the file directory or provide full path)
 - **Linux**
 ```bash
-curl -X POST \
-  -H "Content-Type: text/csv" \
-  --data-binary @large.csv \
-  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv
-  http://localhost:8080/api/analysis/ingestCsv | jq
+curl -X POST -H "Content-Type: text/csv" --data-binary @test.csv https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv | jq
 ```
-
 - **Windows**
 ```bash
-curl -X POST `
-  -H "Content-Type: text/csv" `
-  --data-binary "@large.csv" `
-  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv | jq
+curl -X POST -H "Content-Type: text/csv" --data-binary "@large.csv" https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv | ConvertFrom-Json
 ```
 
 - **Mac**
 ```bash
-curl -X POST \
-  -H "Content-Type: text/csv" \
-  --data-binary @large.csv \
-  https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv | jq
+curl -X POST -H "Content-Type: text/csv" --data-binary @large.csv https://spring-data-analysis-506639246506.europe-west2.run.app/api/analysis/ingestCsv | jq
 ```
 ---
 
