@@ -29,7 +29,7 @@ This is a data analysis service built with:
 
 ## How to use 
 - The API is running at: https://spring-data-analysis-506639246506.europe-west2.run.app/
-- You can upload file through dedicated react front end website: https://github.com/abdursujon/transform-my-raw-data.git
+- You can upload file through [transform-my-raw-data](:https://abdursujon.github.io/transform-my-raw-data/)
 - Or you can ingest file directly from your terminal as below
 
 #### Example for Linux, windows, and mac
